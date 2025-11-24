@@ -28,17 +28,25 @@ Salida esperada:
 import pandas as pd
 from pathlib import Path
 
-
+# Función para leer la primera hoja de un archivo Excel
 def read_excel_sheet(file_path: str) -> pd.DataFrame:
-    # Write here your code
-    pass 
+    dataframe = pd.read_excel(file_path, sheet_name="Sheet1")
+    return dataframe
 
 
-
+# Función para leer y limpiar la segunda hoja de un archivo Excel
 def read_excel_custom_sheet(file_path: str) -> pd.DataFrame:
+    # Función para detectar columnas no vacías
     def is_not_empty_column(col):
-        # Write here your code
-        pass
+        return col.dropna().any()
+
+    dataframe = pd.read_excel(file_path, sheet_name="Sheet2", header=3, skipfooter=4)
+    cols_to_use = [
+        col for col in dataframe.columns if is_not_empty_column(dataframe[col])
+    ]
+    dataframe = dataframe[cols_to_use]
+
+    return dataframe
 
 
 # Para probar el código, descomenta las siguientes líneas

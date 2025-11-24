@@ -44,28 +44,47 @@ Salida esperada:
 
 import pandas as pd
 import typing as t
+import urllib.request as urllib2
 
 
 def read_population_data(url: str, match_text: str = None) -> t.List[pd.DataFrame]:
-    # Write here your code
-    pass
+    # Si se proporciona match_text, solo leer tablas que contengan esa cadena
+    attrs = {
+        "class": "wikitable"
+    }  # Asumiendo que queremos tablas con la clase 'wikitable'
+    opener = urllib2.build_opener()
+    opener.addheaders = [('User-agent', 'Mozilla/5.0')]
+    response = opener.open(url)
+    if match_text:
+        tables = pd.read_html(
+            response.read(), match=match_text, attrs=attrs, na_values=["—", "None"]
+        )
+    else:
+        tables = pd.read_html(response.read(), attrs=attrs, na_values=["–", "None"])
+    return tables
 
 
 def get_table_by_string_match(
     tables: t.List[pd.DataFrame], match_text: str
 ) -> t.Union[pd.DataFrame, None]:
-    # Write here your code
-    pass
+    try:
+        for table in tables:
+            if match_text in table.to_string():
+                return table
+        print(f"No se encontró una tabla que coincida con '{match_text}'.")
+        return None
+    except Exception as e:
+        print(f"Ocurrió un error: {e}")
+        return None
 
 
 def count_tables(tables: t.List[pd.DataFrame]) -> int:
-    # Write here your code
-    pass
+    return len(tables)
 
 
 # Para probar el código, descomenta las siguientes líneas
-# url = "https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_population"
-# tables = read_population_data(url)
+# URL = "https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_population"
+# tables = read_population_data(URL)
 # print(f"Número de tablas en la página: {count_tables(tables)}")
 # selected_table = get_table_by_string_match(tables, "Spain")
 

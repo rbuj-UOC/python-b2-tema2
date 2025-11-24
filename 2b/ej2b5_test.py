@@ -1,5 +1,5 @@
 import pandas as pd
-import requests
+import urllib.request as urllib2
 
 from ej2b5 import read_population_data, get_table_by_string_match, count_tables
 
@@ -9,8 +9,10 @@ URL = "https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_popul
 
 def test_read_population_data():
     # Check if the Wikipedia page is reachable
-    response = requests.get(URL)
-    assert response.status_code == 200, "Wikipedia page not reachable"
+    opener = urllib2.build_opener()
+    opener.addheaders = [('User-agent', 'Mozilla/5.0')]
+    response = opener.open(URL)
+    assert response.status == 200, "Wikipedia page not reachable"
 
     # Check if tables can be read
     tables = read_population_data(URL)

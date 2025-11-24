@@ -24,8 +24,9 @@ import numpy as np
 
 
 def simulate_dice_rolls(number: int) -> dict:
-    # Write here your code
-    pass
+    results = np.random.randint(1, 7, size=number)
+    probabilities = {i: np.sum(results == i) / number for i in range(1, 7)}
+    return probabilities
 
 
 # Si quieres probar tu código, descomenta las siguientes líneas y ejecuta el script

@@ -1,7 +1,6 @@
 """
 Enunciado:
-Desarrolla una función en Python llamada create_meshgrid, que utilice la función np.meshgrid de NumPy para generar una
-cuadrícula de puntos. La función debe:
+Desarrolla una función en Python llamada create_meshgrid, que utilice la función np.meshgrid de NumPy para generar una cuadrícula de puntos. La función debe:
 
 - Recibir tres parámetros: start, end, y step, que definirán los rangos de los arrays x e y.
 - Crear dos arrays x e y utilizando los parámetros proporcionados.
@@ -25,8 +24,12 @@ import typing as t
 def create_and_modify_meshgrid(
     start: int, end: int, step: int
 ) -> t.Tuple[np.ndarray, np.ndarray]:
-    # Write here your code
-    pass
+    x = np.arange(start, end + 1, step)
+    y = np.arange(start, end + 1, step)
+    X, Y = np.meshgrid(x, y)
+    X[0, :] = 99
+
+    return X, Y
 
 
 # Para probar tu código, puedes usar los siguientes parámetros:

@@ -40,23 +40,32 @@ from sklearn.metrics import accuracy_score, classification_report
 
 
 def prepare_data(file_path: str) -> Tuple:
-    # Write here your code
-    pass
+    data = pd.read_csv(file_path)
+    X = data.drop("target", axis=1)
+    y = data["target"]
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42
+    )
+    return X_train, X_test, y_train, y_test
 
 
 def perform_svm_classification(X_test, y_test, clf) -> Tuple[float, str]:
-    # Write here your code
-    pass
+    y_pred = clf.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
+    report = classification_report(y_test, y_pred)
+    return accuracy, report
 
 
 def train_svm_classifier(X_train, y_train) -> SVC:
-    # Write here your code
-    pass
+    clf = SVC(kernel="linear")
+    clf.fit(X_train, y_train)
+    return clf
 
 
 def predict_species(clf: SVC, features: List[float], feature_names: List[str]) -> str:
-    # Write here your code
-    pass
+    features_df = pd.DataFrame([features], columns=feature_names)
+    prediction = clf.predict(features_df)[0]
+    return target_names[prediction]
 
 
 target_names = {0: "Iris Setosa", 1: "Iris Versicolor", 2: "Iris Virginica"}

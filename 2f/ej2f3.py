@@ -5,7 +5,7 @@ JSON, CSV y Excel, utilizando Pandas.
 
 Funciones a desarrollar:
 
-- df_to_json(df: pd.DataFrame, filename: str) -> Tuple[pd.DataFrame, Dict[str, Any])
+- df_to_json(df, filename) -> (pd.DataFrame, dict):
     Descripción:
     Exporta un DataFrame a un archivo JSON y luego lo carga nuevamente, utilizando parámetros específicos que son 
     orient='records' y lines=True, que son retornados para asegurar la consistencia de los datos.
@@ -13,7 +13,7 @@ Funciones a desarrollar:
         - df (pd.DataFrame): DataFrame a exportar.
         - filename (str): Nombre del archivo de destino para la exportación en formato JSON.
 
-- df_to_csv(df: pd.DataFrame, filename: str) -> (pd.DataFrame, dict):
+- df_to_csv(df, filename) -> (pd.DataFrame, dict):
     Descripción:
     Exporta un DataFrame a un archivo CSV y luego lo carga nuevamente, utilizando parámetros específicos que retornan
     para controlar el delimitador, el encabezado y la codificación. Usa sep=';', header=None, y encoding='utf-8'.
@@ -21,7 +21,7 @@ Funciones a desarrollar:
         - df (pd.DataFrame): DataFrame a exportar.
         - filename (str): Nombre del archivo de destino para la exportación en formato CSV.
 
-- df_to_excel(df: pd.DataFrame, filename: str) -> (pd.DataFrame, dict):
+- df_to_excel(df, filename) -> (pd.DataFrame, dict):
     Descripción:
     Exporta un DataFrame a un archivo Excel y luego lo carga nuevamente, especificando el nombre de la hoja para la 
     exportación y retornandolo en la función. Utiliza sheet_name='Pandas to Excel'
@@ -46,18 +46,29 @@ from typing import Tuple, Dict, Any
 
 
 def df_to_json(df: pd.DataFrame, filename: str) -> Tuple[pd.DataFrame, Dict[str, Any]]:
-    # Write here your code
-    pass
+    params = {"orient": "records", "lines": True}
+    df.to_json(filename, **params)
+    loaded_df = pd.read_json(filename, lines=params["lines"], orient=params["orient"])
+    return loaded_df, params
 
 
 def df_to_csv(df: pd.DataFrame, filename: str) -> Tuple[pd.DataFrame, Dict[str, Any]]:
-    # Write here your code
-    pass
+    params = {"sep": ";", "header": None, "encoding": "utf-8"}
+    df.to_csv(filename, **params)
+    loaded_df = pd.read_csv(
+        filename,
+        sep=params["sep"],
+        header=params["header"],
+        encoding=params["encoding"],
+    )
+    return loaded_df, params
 
 
 def df_to_excel(df: pd.DataFrame, filename: str) -> Tuple[pd.DataFrame, Dict[str, Any]]:
-    # Write here your code
-    pass
+    params = {"sheet_name": "Pandas to Excel"}
+    df.to_excel(filename, **params)
+    loaded_df = pd.read_excel(filename, sheet_name=params["sheet_name"])
+    return loaded_df, params
 
 
 # Para probar el código, descomenta las siguientes líneas

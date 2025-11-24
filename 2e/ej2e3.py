@@ -4,8 +4,7 @@ Desarrolla un conjunto de funciones para visualizar el conjunto de datos Iris ut
 gráficos de densidad, mediante Seaborn, Matplotlib, y Pandas.
 
 Funciones a desarrollar:
-- data_processing( data: np.ndarray, feature_names: List[str], target: Optional[np.ndarray] = None,
-target_names: Optional[List[str]] = None, target_feature_name: str = "species") -> pd.DataFrame:
+- data_processing(data, feature_names, target=None, target_names=None, target_feature_name='species') -> pd.DataFrame
   - Descripción: 
     Prepara un DataFrame de Pandas asignando nombres a las características y etiquetas de clase.
   - Parámetros: 
@@ -15,8 +14,7 @@ target_names: Optional[List[str]] = None, target_feature_name: str = "species") 
     - target_names (List[str], opcional): Nombres de las clases.
     - target_feature_name (str): Nombre de la columna de clase en el DataFrame.
 
-- pairplot_graphic( df: pd.DataFrame, columns: Optional[List[str]] = None, **viz_params: Dict[str, str]) -> 
-sns.PairGrid:
+- pairplot_graphic(df, columns=None, **viz_params) -> sns.PairGrid
   - Descripción: 
     Visualiza gráficos de pares, mediante Seaborn para crear una matriz de gráficos de pares para visualizar las
     relaciones entre características y clases. Recibe columnas específicas o el dataset completo para visualizar.
@@ -36,25 +34,31 @@ Salida Esperada:
 diagonal. Las especies se distinguen por colores, para identificar patrones y diferencias entre ellas.
 """
 
-from typing import List, Optional, Dict
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
-import numpy as np
 from sklearn.datasets import load_iris
 
 
 def data_processing(
     data, feature_names, target=None, target_names=None, target_feature_name="species"
 ):
-    # Write here your code
-    pass
+    df = pd.DataFrame(data=data, columns=feature_names)
+    if target is not None and target_names is not None:
+        df[target_feature_name] = pd.Categorical.from_codes(target, target_names)
+    return df
 
 
-def pairplot_graphic( df: pd.DataFrame, columns: Optional[List[str]] = None, 
-                     **viz_params: Dict[str, str]) -> sns.PairGrid:
-    # Write here your code
-    pass
+def pairplot_graphic(df, columns=None, **viz_params):
+    if columns is not None:
+        df_subset = (
+            df[columns + [viz_params.get("hue")]]
+            if viz_params.get("hue") in df
+            else df[columns]
+        )
+    else:
+        df_subset = df
+    return sns.pairplot(df_subset, **viz_params)
 
 
 # Para probar el código, descomenta las siguientes líneas
@@ -71,7 +75,6 @@ def pairplot_graphic( df: pd.DataFrame, columns: Optional[List[str]] = None,
 #         "palette": "husl",
 #         "corner": True,
 #     }
-#     columns_to_visualize = None
+#     columns_to_visualize = None  # ['sepal length (cm)', 'sepal width (cm)']
 #     plot = pairplot_graphic(df_iris, columns=columns_to_visualize, **viz_params)
 #     plt.show()
-

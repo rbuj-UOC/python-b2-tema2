@@ -42,18 +42,29 @@ import numpy as np
 
 
 def read_csv_basic(file_path: str) -> pd.DataFrame:
-    # Write here your code
-    pass
+    return pd.read_csv(file_path)
 
 
 def custom_dataframe_describe(df: pd.DataFrame) -> pd.DataFrame:
-    # Write here your code
-    pass
+    df_numeric = df.select_dtypes(include=[np.number])
+    descriptions = pd.DataFrame(
+        {
+            "count": df_numeric.count(),
+            "mean": df_numeric.mean(),
+            "median": df_numeric.median(),
+            "std": df_numeric.std(),
+            "min": df_numeric.min(),
+            "25%": df_numeric.quantile(0.25),
+            "50%": df_numeric.quantile(0.5),
+            "75%": df_numeric.quantile(0.75),
+            "max": df_numeric.max(),
+        }
+    )
+    return descriptions.T
 
 
 def pandas_dataframe_describe(df: pd.DataFrame) -> pd.DataFrame:
-    # Write here your code
-    pass
+    return df.describe()
 
 
 # Para probar el código, descomenta las siguientes líneas

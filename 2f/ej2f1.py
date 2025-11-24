@@ -4,14 +4,14 @@ Desarrolla un conjunto de funciones que permitan cargar, guardar y visualizar el
 Pandas, Matplotlib, Seaborn y Pickle.
 
 Funciones a desarrollar:
-- create_histograms(df: DataFrame, features: List[str]) -> matplotlib.figure.Figure:
+- create_histograms(df, features) -> matplotlib.figure.Figure:
     Descripción:
     Genera histogramas para un conjunto de datos de vinos, diferenciando las muestras según su clase de vino.
     Parámetros:
         - df (pd.DataFrame): DataFrame que contiene los datos del conjunto de vinos.
         - features (List[str]): Lista de nombres de las características para las cuales se generarán los histogramas.
 
-- save_img_pickle(fig: Figure, filename: str) -> None:
+- save_img_pickle(fig, filename) -> None:
     Descripción:
     Guarda una figura de Matplotlib en un archivo utilizando Pickle, lo que permite su recuperación y visualización
     posterior sin necesidad de regenerar el gráfico.
@@ -19,7 +19,7 @@ Funciones a desarrollar:
         - fig (matplotlib.figure.Figure): Figura que se desea guardar.
         - filename (str): Ruta del archivo donde se guardará la figura.
 
-- load_and_display_figure(filename: str) -> matplotlib.figure.Figure:
+- load_and_display_figure(filename) -> matplotlib.figure.Figure:
     Descripción:
     Carga y muestra una figura guardada previamente desde un archivo.
     Parámetros:
@@ -50,18 +50,25 @@ from pandas.core.frame import DataFrame
 
 
 def create_histograms(df: DataFrame, features: List[str]) -> Figure:
-    # Write here your code
-    pass
+    fig, axs = plt.subplots(2, 3, figsize=(15, 10))
+    for i, feature in enumerate(features):
+        ax = axs[i // 3, i % 3]
+        sns.histplot(df, x=feature, hue="target", ax=ax, kde=True)
+    plt.tight_layout()
+    return fig
 
 
 def save_img_pickle(fig: Figure, filename: str) -> None:
-    # Write here your code
-    pass
+    with open(filename, "wb") as f:
+        pickle.dump(fig, f)
+    plt.close(fig)
+    return True
 
 
 def load_and_display_figure(filename: str) -> Figure:
-    # Write here your code
-    pass
+    with open(filename, "rb") as f:
+        fig = pickle.load(f)
+    return fig
 
 
 # Para probar el código, descomenta las siguientes líneas

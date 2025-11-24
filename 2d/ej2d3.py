@@ -39,8 +39,10 @@ import matplotlib.pyplot as plt
 def perform_linear_regression(
     data: pd.DataFrame, variable_1: str, variable_2: str
 ) -> Tuple[float, float, float, float, float]:
-    # Write here your code
-    pass
+    slope, intercept, r_value, p_value, std_err = linregress(
+        data[variable_1], data[variable_2]
+    )
+    return slope, intercept, r_value, p_value, std_err
 
 
 def plot_regression_line(
@@ -51,8 +53,23 @@ def plot_regression_line(
     intercept: float,
     return_fig_ax_test=False,
 ):
-    # Write here your code
-    pass
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.scatter(data[variable_1], data[variable_2], alpha=0.5, label="Datos")
+    ax.plot(
+        data[variable_1],
+        slope * data[variable_1] + intercept,
+        color="red",
+        label="Línea de regresión",
+    )
+    ax.set_xlabel(variable_1)
+    ax.set_ylabel(variable_2)
+    ax.set_title(f"Linear Regression between {variable_1} and {variable_2}")
+    ax.legend()
+
+    if return_fig_ax_test:
+        return fig, ax
+    else:
+        plt.show()
 
 
 # Para probar el código, descomenta este código
